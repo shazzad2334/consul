@@ -1,10 +1,11 @@
 package state
 
 import (
+	memdb "github.com/hashicorp/go-memdb"
+
 	"github.com/hashicorp/consul/agent/consul/stream"
 	"github.com/hashicorp/consul/agent/structs"
 	"github.com/hashicorp/consul/proto/pbsubscribe"
-	memdb "github.com/hashicorp/go-memdb"
 )
 
 // EventPayloadCheckServiceNode is used as the Payload for a stream.Event to
@@ -30,7 +31,8 @@ func serviceHealthSnapshot(s *Store, topic stream.Topic) stream.SnapshotFunc {
 			return 0, err
 		}
 
-		for _, n := range nodes {
+		for i := range nodes {
+			n := nodes[i]
 			event := stream.Event{
 				Index: idx,
 				Topic: topic,
